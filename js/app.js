@@ -34,9 +34,11 @@ const boredomStatEl = document.getElementById('boredom-stat');
 const hungerStatEl = document.getElementById('hunger-stat');
 const sleepinessStatEl = document.getElementById('sleepiness-stat');
 
-const playButtonEl = document.getElementById('play');
-const feedButtonEl = document.getElementById('feed');
-const sleepButtonEl = document.getElementById('sleep');
+// const playButtonEl = document.getElementById('play');
+// const feedButtonEl = document.getElementById('feed');
+// const sleepButtonEl = document.getElementById('sleep');
+
+const buttonEls = document.querySelectorAll('.button-wrapper > button');
 
 const gameMessageEl = document.getElementById('message');
 const resetButtonEl = document.getElementById('restart');
@@ -48,14 +50,49 @@ const init = function() {
     gameOver = false;
     timer = setInterval(runGame, 2000);
     console.log('initializing');
+    render();
 };
 
 const runGame = function() {
-    console.log('game is running!');
+    updateStates();
+    checkGameOver();
+    render();
+};
+
+const render = function() {
+    boredomStatEl.innerText = state.boredom;
+    hungerStatEl.innerText = state.hunger;
+    sleepinessStatEl.innerText = state.sleepiness;
+    if (gameOver) {
+        window.clearInterval(timer);
+        gameMessageEl.classList.remove('hidden');
+        resetButtonEl.classList.remove('hidden');
+    }
+};
+
+const generateRandomIncrement = function() {
+    return Math.floor(Math.random() * 4);
+};
+
+const updateStates = function() {
+    state.boredom += generateRandomIncrement();
+    state.hunger += generateRandomIncrement();
+    state.sleepiness += generateRandomIncrement();
+};
+
+const checkGameOver = function() {
+    if (state.boredom >= 10 || state.hunger >= 10 || state.sleepiness >= 10) {
+        gameOver = true;
+    };
+};
+
+const handleClick = function(e) {
+    console.log(e.target);
 };
 
 /*----------------------------- Event Listeners -----------------------------*/
 
+buttonEls.forEach(b => b.addEventListener('click', handleClick));
 
 // begin
 
